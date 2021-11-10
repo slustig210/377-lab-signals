@@ -21,14 +21,16 @@ int main(int argc, char **argv) {
 
     int pid = fork();
     if (pid) {
+        // parent
         printf(1, "Child process created with PID %d\nSending SIGUSR1 and then going to sleep:\n", pid);
         sigsend(pid, SIGUSR1);
         sleep(10000);
     } else {
+        // child
         // wait for SIGUSR1, then exit.
         sleep(10000);
         printf(1, "Child process exiting.\n")
-        exit(); // will send SIGCHLD
+        exit(); // will send SIGCHLD to parent
     }
 
     printf(1, "Parent process waiting for child.\n");

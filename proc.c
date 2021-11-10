@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "signal.h"
 
 struct {
   struct spinlock lock;
@@ -112,6 +113,12 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  // TODO: YOUR CODE HERE
+  // initialize signal and sighandlers array
+  // to contain no signals and to have no signal handlers
+  // we will say the value of 0 is the same as not having
+  // a signal handler.
+
   return p;
 }
 
@@ -200,6 +207,9 @@ fork(void)
   np->parent = curproc;
   *np->tf = *curproc->tf;
 
+  // TODO: YOUR CODE HERE
+  // copy signal handlers from parent to child
+
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
 
@@ -246,6 +256,10 @@ exit(void)
   iput(curproc->cwd);
   end_op();
   curproc->cwd = 0;
+
+  // TODO: YOUR CODE HERE
+  // send a SIGCHLD signal to the current process's parent,
+  // signifying that the process has exited.
 
   acquire(&ptable.lock);
 
@@ -342,6 +356,16 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+
+      // TODO: YOUR CODE HERE
+      // process the value of p->signal
+      // if p->signal is not 0
+      // find each bit of p->signal that is set to 1
+      // call the signal handler for this index if it exists
+      // (sighandler[i] == 0 means it does not exist) by calling
+      // register_handler(sighandler), which adds a stack frame that will
+      // run the sighandler.
+      // p->signal should be 0 (have no signals left to process) afterwards.
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -531,4 +555,62 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+// locate the current process' stack
+// open a new frame
+// update the old instruction pointer so that when new code is completed
+// the process normally resumes its execution
+void
+register_handler(sighandler_t sighandler)
+{
+  struct proc *proc = myproc();
+
+  char *addr = uva2ka(proc->pgdir, (char *) proc->tf->esp);
+  if ((proc->tf->esp & 0xFFF) == 0)
+    panic("esp_offset == 0");
+
+  // open a new frame
+  *(int *)(addr + ((proc->tf->esp - 4) & 0xFFF)) = proc->tf->eip;
+  proc->tf->esp -= 4;
+
+  // update eip
+  proc->tf->eip = (uint) sighandler;
+}
+
+// assign the given signal handler to the signum
+// for the current process
+// return -1 on error
+// return 0 on error
+int
+signal(int signum, sighandler_t sighandler)
+{
+  if (signum < 0 || signum >= NSIGNAL)
+    return -1;
+  
+  struct proc *proc = myproc();
+
+  // TODO: YOUR CODE HERE
+
+  return 0;
+}
+
+// send signum signal to process with given pid
+// return -1 on error
+// return 0 on success
+int
+sigsend(int pid, int signum)
+{
+  if (signum < 0 || signum >= NSIGNAL)
+    return -1;
+
+  // TODO: YOUR CODE HERE
+  // find the process with the given pid, and set
+  // the bit at position signum to 1.
+
+  // remember to wake up a process that receives a signal
+  // if it has a signal handler for that signal
+  // hint: see kill() on how to find process and wake up process
+
+  return -1;
 }

@@ -121,6 +121,10 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 
+void            register_handler(void (*)(void));
+int             signal(int, void (*)(void));
+int             sigsend(int, int);
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 

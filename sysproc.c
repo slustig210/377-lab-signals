@@ -89,3 +89,34 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// attach a signal handler to the specific signal number for
+// the current process.
+// return 0 on success, -1 on failure
+int
+sys_signal(void)
+{
+  int signum;
+  sighandler_t sighandler;
+
+  if (argint(0, &signum) < 0)
+    return -1;
+  if (argptr(1, (char **) &sighandler, sizeof(sighandler_t)) < 0)
+    return -1;
+
+  return signal(signum, sighandler);
+}
+
+int
+sys_sigsend(void)
+{
+  int pid;
+  int signum;
+
+  if (argint(0, &pid) < 0)
+    return -1;
+  if (argint(1, &signum) < 0)
+    return -1;
+
+  return sigsend(pid, signum);
+}

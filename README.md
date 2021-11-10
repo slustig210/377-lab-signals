@@ -49,6 +49,8 @@ correspond to the signal of index 1, and so on.
 The function at each index of the array will be called when the signal number of that index is received by the process.
 In today's lab, each of these will be initialized to 0 on creation of a new user process.
 
+## Part 2 - Implementing some system calls (15 points)
+
 For our implementation, we will be implementing 2 system calls:
 ```c
 int signal(int signum, sighandler_t sighandler);
@@ -58,13 +60,19 @@ Signal assigns, for the current process, the given signal handler to the given s
 Sigsend finds the process with the given pid and sends a signal with the given signal number.
 Both return 0 on success and -1 on error.
 
+## Part 3 - Processing signals (15 points)
+
 There are only a few other things we need to do other than implementing the system calls to complete the implementation.
 First, we must update the `scheduler()` function in `proc.c` to register the signal handlers upon a process receiving a signal.
 It must check which signals the process received, register each handler we need for that set of signals, and reset the value
 of `signal` (in the proc struct) back to 0. To register a handler we have the `register_handler` function defined in `proc.c`. This function adds a stack frame in the process, which will mean the signal handler will be called immediately when the process starts running again.
 
-Secondly, we must initialize the values of `signal` and `sighandlers` upon creating a new process. This also applies to creating a process with `fork()`, in which case we must copy the `sighandlers` from the parent process to the child process. This is done in `fork()` in `proc.c`.
+## Part 4 - Finishing up our implementation (15 points)
+
+We have 2 more features left to implement: we must initialize the values of `signal` and `sighandlers` upon creating a new process. This also applies to creating a process with `fork()`, in which case we must copy the `sighandlers` from the parent process to the child process. This is done in `fork()` in `proc.c`.
 
 Lastly, we must implement code in `exit()` which will send a `SIGCHLD` signal to the parent process every time a child exits.
+
+## Part 5 - You're done! (5 points)
 
 After all these steps, the implementation will be complete. I encourage you to play around with the implementation; you can modify `signaltest.c` as you please.

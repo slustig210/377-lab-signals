@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
         // child
         // wait for SIGUSR1, then exit.
         sleep(10000);
-        printf(1, "Child process exiting.\n")
+        printf(1, "Child process exiting.\n");
         exit(); // will send SIGCHLD to parent
     }
 

@@ -209,6 +209,7 @@ fork(void)
 
   // TODO QUESTION 4.2
   // copy signal handlers from parent to child
+  // you can copy over each signal handler one by one in a loop
 
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
@@ -366,6 +367,10 @@ scheduler(void)
       // register_handler(sighandler), which adds a stack frame that will
       // run the sighandler.
       // p->signal should be 0 (have no signals left to process) afterwards.
+
+      // to check if a bit is set to 1, you can use bitwise &
+      // https://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit
+      // check the part of the answer titled "Checking a bit"
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -607,6 +612,10 @@ sigsend(int pid, int signum)
   // TODO QUESTION 2.2
   // find the process with the given pid, and set
   // the bit at position signum to 1.
+
+  // remember you can set a bit to 1 using the
+  // bitwise or operator, |
+  // https://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit
 
   // remember to wake up a process that receives a signal
   // if it has a signal handler for that signal

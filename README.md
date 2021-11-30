@@ -7,6 +7,11 @@ in which each process will have a set of special functions called signal handler
 Each signal handler is associated with a integer number which represents
 the signal that causes the signal handler to be called.
 
+You can clone the repo by using:
+```bash
+git clone https://github.com/slustig210/377-lab-signals.git
+```
+
 ## Part 1 - Introduction to signals (15 points)
 
 In today's implementation, we will store signals and signal handlers

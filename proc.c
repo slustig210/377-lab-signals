@@ -113,7 +113,7 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
-  // TODO: YOUR CODE HERE
+  // TODO QUESTION 4.1
   // initialize signal and sighandlers array
   // to contain no signals and to have no signal handlers
   // we will say the value of 0 is the same as not having
@@ -207,7 +207,7 @@ fork(void)
   np->parent = curproc;
   *np->tf = *curproc->tf;
 
-  // TODO: YOUR CODE HERE
+  // TODO QUESTION 4.2
   // copy signal handlers from parent to child
 
   // Clear %eax so that fork returns 0 in the child.
@@ -257,7 +257,7 @@ exit(void)
   end_op();
   curproc->cwd = 0;
 
-  // TODO: YOUR CODE HERE
+  // TODO QUESTION 4.3
   // send a SIGCHLD signal to the current process's parent,
   // signifying that the process has exited.
 
@@ -357,7 +357,7 @@ scheduler(void)
       switchuvm(p);
       p->state = RUNNING;
 
-      // TODO: YOUR CODE HERE
+      // TODO QUESTION 3
       // process the value of p->signal
       // if p->signal is not 0
       // find each bit of p->signal that is set to 1
@@ -590,7 +590,7 @@ signal(int signum, sighandler_t sighandler)
   
   struct proc *proc = myproc();
 
-  // TODO: YOUR CODE HERE
+  // TODO QUESTION 2.1
 
   return 0;
 }
@@ -604,7 +604,7 @@ sigsend(int pid, int signum)
   if (signum < 0 || signum >= NSIGNAL)
     return -1;
 
-  // TODO: YOUR CODE HERE
+  // TODO QUESTION 2.2
   // find the process with the given pid, and set
   // the bit at position signum to 1.
 

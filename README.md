@@ -9,7 +9,7 @@ the signal that causes the signal handler to be called.
 
 You can clone the repo by using:
 ```bash
-git clone https://github.com/slustig210/377-signals-lab.git
+git clone https://github.com/slustig210/377-lab-signals.git
 ```
 
 ## Part 1 - Introduction to signals (15 points)

@@ -562,6 +562,8 @@ procdump(void)
   }
 }
 
+// Source for register_handler: https://www.cs.bgu.ac.il/~os122/wiki.files/Operating%20Systems%20-%20assignment%201.pdf
+
 // locate the current process' stack
 // open a new frame
 // update the old instruction pointer so that when new code is completed
